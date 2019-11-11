@@ -12,6 +12,7 @@ set<int> adjacency[mx];
 // Parameters
 double alpha = 0.5;
 double gammaPower = 2.0;
+const int theta = 1;
 
 double partitionCost(double sz) {
     double cost = 0;
@@ -44,9 +45,15 @@ int main() {
     }
     random_shuffle(ordering.begin(), ordering.end());
 
+    set<pair<int, int> > cardinality;
+    set<pair<int, int> > :: iterator itr;
+    map<int, int> partitionSize;
+
     // Initial paritions
     for(int i = 0; i < k; ++i) {
         partitions[i].insert(ordering[i]);
+        cardinality.insert({1, i});
+        partitionSize[i] = 1;
     }
 
     auto start = high_resolution_clock::now(); 
@@ -54,8 +61,11 @@ int main() {
     // Streaming vertices
     for(int node_number = k; node_number < n; ++node_number) {
         int finalPartition = 0, node = ordering[node_number], additionalEdge = 0;
-        double objectiveFunctionScore = -1e18; 
-        for(int container = 0; container < k; ++container) {
+        double objectiveFunctionScore = -1e18;
+
+        itr = cardinality.begin(); 
+        for(int i = 0; i < min(k, theta); ++i, ++itr) {
+            int container = itr->second;
             double intraPartition = partitionCost((int)partitions[container].size());
             int interPartition = 0;
 
@@ -74,6 +84,9 @@ int main() {
         }
         partitions[finalPartition].insert(node);
         cutEdge[finalPartition] += additionalEdge;
+        cardinality.erase({partitionSize[finalPartition], finalPartition});
+        ++partitionSize[finalPartition];
+        cardinality.insert({partitionSize[finalPartition], finalPartition});
     }
 
     auto stop = high_resolution_clock::now(); 
