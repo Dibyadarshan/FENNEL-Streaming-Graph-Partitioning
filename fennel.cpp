@@ -4,14 +4,14 @@ using namespace std;
 using namespace std::chrono; 
 
 // Number of partitions
-const int k = 5;
+const int k = 8;
 const int mx = 1000005;
 set<int> partitions[k];
 set<int> adjacency[mx];
 
 // Parameters
 double alpha = 0.5;
-double gammaPower = 2.0;
+double gammaPower = 1.5;
 
 double partitionCost(double sz) {
     double cost = 0;
@@ -22,20 +22,22 @@ double partitionCost(double sz) {
 int main() {
     srand(42);
     
-    int n;
+    int n, m = 0;
     cin >> n;
     for(int i = 1; i <= n; ++i) {
         int number_of_nodes;
         cin >> number_of_nodes;
+        m += number_of_nodes;
         for(int j = 0; j < number_of_nodes; ++j) {
             int x;
             cin >> x;
             adjacency[i].insert(x);
         }
     }
+    m /= 2;
 
     // Results
-    vector<int> cutEdge(k);
+    vector<int> cutEdge(k, 0);
 
     // Ordering of streaming vertices
     vector<int> ordering(n);
@@ -76,7 +78,6 @@ int main() {
         cutEdge[finalPartition] += additionalEdge;
     }
 
-    auto stop = high_resolution_clock::now(); 
 
     for(int i = 0; i < k; ++i) {
         cout << "Partition: " << i+1 << "\n"; 
@@ -84,14 +85,19 @@ int main() {
         cout << "\n---\n";
     }
 
+    auto stop = high_resolution_clock::now(); 
+
     double result = 0;
+    int totalCutEdges = 0;
     for(int i = 0; i < k; ++i) {
         DB(cutEdge[i]);
         DB(partitionCost(partitions[i].size()));
         result = ((double) cutEdge[i]) - partitionCost(partitions[i].size());
+        totalCutEdges += cutEdge[i];
     }
-    cout << "Objective function score: " << result << "\n";
-
+    totalCutEdges = m - totalCutEdges;
+    // DB(totalCutEdges);
+    DB(result);
     auto duration = duration_cast<microseconds>(stop - start); 
     DB(duration.count());
 

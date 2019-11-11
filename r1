@@ -1,5 +1,15 @@
+Partition: 1
 4 9 15 16 18 21 30 
+---
+Partition: 2
 3 7 13 26 28 
+---
+Partition: 3
 2 8 24 25 27 
+---
+Partition: 4
 1 6 11 12 14 20 22 
+---
+Partition: 5
 5 10 17 19 23 29 
+---
