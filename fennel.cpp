@@ -19,6 +19,12 @@ double partitionCost(double sz) {
     return cost;
 }
 
+double Cost(double sz) {
+    double cost = 0;
+    cost = alpha * pow(sz, gammaPower);
+    return cost;
+}
+
 int main() {
     srand(42);
     
@@ -92,7 +98,7 @@ int main() {
     for(int i = 0; i < k; ++i) {
         DB(cutEdge[i]);
         DB(partitionCost(partitions[i].size()));
-        result = ((double) cutEdge[i]) - partitionCost(partitions[i].size());
+        result += ((double) cutEdge[i]) - Cost(partitions[i].size());
         totalCutEdges += cutEdge[i];
     }
     totalCutEdges = m - totalCutEdges;
