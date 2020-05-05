@@ -7,7 +7,7 @@ The dataset generation can be done using the following command
 
 `$ cd dataset`
 
-`$ g++ generate_graph.cpp && ./a.out < outputfile`
+`$ g++ generate_graph.cpp && ./a.out > outputfile`
 
 ### Partitioning a Graph
 The graph can be partitioned using FENNEL using following command
