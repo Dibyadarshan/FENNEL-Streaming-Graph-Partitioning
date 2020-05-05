@@ -1,4 +1,4 @@
-# FENNEL-Streaming-Graph-Partitioning
+# Distributed Balanced Graph Partitioning
 
 All of the following codes have been tested using gcc version is 7.5.0.
 
